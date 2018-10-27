@@ -1,0 +1,86 @@
+﻿@{
+    ViewBag.Title = "Url Shortener";
+}
+<script src="~/Scripts/site/nintex.urlshortener.js"></script>
+<script src="~/Scripts/site/clipboard.min.js"></script>
+<br />
+
+<div class="row">
+    <div class="col-md-4 col-md-offset-4">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Url" id="urlTxt">
+            <span class="input-group-btn">
+                <button class="btn btn-secondary" id="shortenBtn" type="button">Shorten!</button>
+            </span>
+        </div>
+    </div>
+</div>
+<br />
+
+
+<div class="row">
+    <div class="col-md-4 col-md-offset-4">
+        <div class="input-group">
+            <input type="text" class="form-control" placeholder="Url" id="shortUrlTxt">
+            <span class="input-group-btn">
+                <button class="btn btn-secondary" id="flattenBtn" type="button">Flatten!</button>
+            </span>
+        </div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="modalViewUrl" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div id="headerTxt">
+                    <center><h1> URL Shortener</h1></center>
+                </div>
+            </div>
+            <div class="modal-body ">
+                <div id="modelContent">
+                    <div class="row">
+                        <div class="col-md-7">
+                            <div class="input-group input-group-sm">
+                                <input id="Url" readonly class="form-control" />
+                                <span class="input-group-btn">
+                                    <button type="button" class=" btn" data-clipboard-target="#Url">Copy</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="loader-wrapper">
+    <div id="loader"></div>
+    <div class="loader-section section-left"></div>
+    <div class="loader-section section-right"></div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var clip = new Clipboard('.btn');
+            $('#shortenBtn').click(function () {
+                var inputUrl = $('#urlTxt ').val();
+                if (window.nintex.urlshortener.validateUrl(inputUrl)) {
+                    window.nintex.urlshortener.getShortUrl(inputUrl);
+                }
+            });
+
+            $('#flattenBtn').click(function () {
+                var inputUrl = $('#shortUrlTxt').val();
+                if (window.nintex.urlshortener.validateUrl(inputUrl)) {
+                    window.nintex.urlshortener.getOriginalUrl(inputUrl);
+                }
+            });
+        });
+
+        function getShortUrl() {
+
+        }
+    </script>
+}
+
+
