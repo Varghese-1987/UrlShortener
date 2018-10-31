@@ -43,10 +43,10 @@
         public JsonResult GetOriginalUrl(string inputUrl)
         {
             var result = string.Empty;
-            var siteUrl= string.Format("{0}://{1}/", Request.Url.Scheme, Request.Url.Authority);
-            var shortUrl = UrlShortenerCache.Instance.GetOriginalUrl(inputUrl.Replace(siteUrl,""));
+            var siteUrl = string.Format("{0}://{1}/", Request.Url.Scheme, Request.Url.Authority);
+            var shortUrl = UrlShortenerCache.Instance.GetOriginalUrl(inputUrl.Replace(siteUrl, ""));
             result = shortUrl == null ? "Url Not Found" : shortUrl.OriginalUrl;
-            return this.Json(new { IsSuccess= shortUrl != null, OriginalUrl= result}, JsonRequestBehavior.AllowGet);
+            return this.Json(new { IsSuccess = shortUrl != null, OriginalUrl = result }, JsonRequestBehavior.AllowGet);
         }
 
         /// <summary>
@@ -57,8 +57,13 @@
         public ActionResult Click(string segment)
         {
             var shortUrl = UrlShortenerCache.Instance.GetOriginalUrl(segment);
-            if (shortUrl != null) {
-                return this.RedirectPermanent(shortUrl.OriginalUrl);
+            if (shortUrl != null)
+            {
+                if (shortUrl.OriginalUrl.StartsWith("http://") || shortUrl.OriginalUrl.StartsWith("https://"))
+                {
+                    return this.Redirect(shortUrl.OriginalUrl);
+                }
+                return this.Redirect(string.Format("http://{0}", shortUrl.OriginalUrl));
             }
             return View("~/Views/Shared/Error404.cshtml");
         }

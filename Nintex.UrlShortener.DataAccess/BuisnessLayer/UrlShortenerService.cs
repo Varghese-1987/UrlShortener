@@ -14,6 +14,7 @@
         {
             this.repository = repository;
         }
+
         /// <summary>
         /// CreateShortUrl
         /// </summary>
@@ -22,12 +23,12 @@
         public ShortUrlVM CreateShortUrl(string originalUrl)
         {
             var existingShortUrl = repository.GetOne<ShortUrl>(x => x.OriginalUrl == originalUrl);
-            if(existingShortUrl==null)
+            if (existingShortUrl == null)
             {
                 existingShortUrl = new ShortUrl()
                 {
                     OriginalUrl = originalUrl,
-                    UniqueId = UniqueIdHelper.GetUniqueId(),
+                    UniqueId = this.GetUniqueId(UniqueIdHelper.GetUniqueId()),
                     CreatedDate = DateTime.UtcNow
                 };
                 repository.Create<ShortUrl>(existingShortUrl);
@@ -52,8 +53,6 @@
                 return new ShortUrlVM(existingShortUrl);
             }
             return new ShortUrlVM();
-
-
         }
 
         /// <summary>
@@ -70,5 +69,26 @@
             }
             return new ShortUrlVM();
         }
+
+
+        #region private methods
+        /// <summary>
+        /// Additional checking to ensure duplicate unique ids are not present
+        /// </summary>
+        /// <param name="uniqueId"></param>
+        /// <returns></returns>
+        private string GetUniqueId(string uniqueId)
+        {
+            if (UrlShortenerCache.Instance.GetOriginalUrl(uniqueId) == null)
+            {
+                return uniqueId;
+            }
+            else
+            {
+                GetUniqueId(UniqueIdHelper.GetUniqueId());
+            }
+            return uniqueId;
+        }
+        #endregion
     }
 }
