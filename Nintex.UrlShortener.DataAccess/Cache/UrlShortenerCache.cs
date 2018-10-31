@@ -32,12 +32,6 @@
         /// </summary>
         private HashSet<ShortUrlVM> itemsList;
 
-
-        /// <summary>
-        /// Repository Interface
-        /// </summary>
-        UrlShortenerContext repository = new UrlShortenerContext();
-
         private UrlShortenerCache()
         {
             this.InitializeCache();
