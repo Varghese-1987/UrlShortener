@@ -13,14 +13,9 @@
     public sealed class UrlShortenerCache
     {
         /// <summary>
-        /// Sync object
-        /// </summary>
-        private static object root = new object();
-
-        /// <summary>
         /// Cache object
         /// </summary>
-        private static volatile UrlShortenerCache cache;
+        private static readonly Lazy<UrlShortenerCache>  cache=new Lazy<UrlShortenerCache>(()=>new UrlShortenerCache ());
 
         /// <summary>
         /// For only one thread in one time access
@@ -44,18 +39,7 @@
         {
             get
             {
-                if (cache == null)
-                {
-                    lock (root)
-                    {
-                        if (cache == null)
-                        {
-                            cache = new UrlShortenerCache();
-                        }
-                    }
-                }
-
-                return cache;
+                return cache.Value;
             }
         }
 

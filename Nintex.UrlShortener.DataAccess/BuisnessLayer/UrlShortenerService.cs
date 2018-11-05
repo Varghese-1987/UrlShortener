@@ -47,12 +47,8 @@
         /// <returns></returns>
         public ShortUrlVM GetOriginalUrl(string uniqueId)
         {
-            var existingShortUrl = repository.GetOne<ShortUrl>(x => x.UniqueId == uniqueId);
-            if (existingShortUrl != null)
-            {
-                return new ShortUrlVM(existingShortUrl);
-            }
-            return new ShortUrlVM();
+            var existingShortUrl = repository.GetOne<ShortUrl>(x => x.UniqueId.Equals(uniqueId));
+            return existingShortUrl !=null? new ShortUrlVM (existingShortUrl):new ShortUrlVM();
         }
 
         /// <summary>
@@ -62,12 +58,8 @@
         /// <returns></returns>
         public ShortUrlVM GetShortUrl(string originalUrl)
         {
-            var existingShortUrl = repository.GetOne<ShortUrl>(x => x.OriginalUrl == originalUrl);
-            if (existingShortUrl != null)
-            {
-                return new ShortUrlVM(existingShortUrl);
-            }
-            return new ShortUrlVM();
+            var existingShortUrl = repository.GetOne<ShortUrl>(x => x.OriginalUrl.Equals(originalUrl));
+            return existingShortUrl != null ? new ShortUrlVM(existingShortUrl) : new ShortUrlVM();
         }
 
 
